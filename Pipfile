@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 faker = "*"
 sqlalchemy = "*"
-shell "*"
+shell = "*"
 
 [requires]
 python_version = "3.8.13"
