@@ -13,6 +13,7 @@ from words import word_list
 
 Base = declarative_base()
 
+
 def get_word(): 
     word= random.choice(word_list)
     return word.upper() # We'll be converting all user input to uppercase to make comparison logic simpler and easier to read. 
@@ -28,6 +29,7 @@ def play(word):
     print(display_hangman(tries)) # Displays the initial state of Hangman 
     print(word_completion) # Displays the intial state of the word w/ all underscores 
     print("\n") # Prints a new line for readability 
+
 
     while not guessed and tries > 0: # Loop that'll run until the word is guessed or user runs out of tries
         guess = input("Please guess a letter or word: ").upper() # Prompts user to guess a letter/word & converts input to uppercase
