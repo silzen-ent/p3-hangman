@@ -78,7 +78,7 @@ def play(word, selected_player):
         print(word_completion)
         print("\n") # Prints new line for readability
     if guessed: 
-        print("FLAWLESS VICTORY. Congrats, you guessed the word! You win!")
+        print("FLAWLESS VICTORY. Congrats, you guessed the right word! You win!")
     
         Session = sessionmaker(bind=engine)
         session = Session()
@@ -89,7 +89,7 @@ def play(word, selected_player):
         print("Your score has been saved.")
 
     else:
-        print("Everybody is laughing at you, loser! You ran out of tries & lost the game. The word was " + word + ". Better luck next time!")
+        print("FAILURE. You ran out of tries & lost the game. The word was " + word + ". Better luck next time!")
 
 
 
@@ -180,8 +180,8 @@ def main(): # Main function that puts everything together
         session.commit()
 
     def edit_player_id(selected_player):
-        change = input("Enter your new name: ")
-        selected_player.player_name = change
+        new_name = input("Enter your new name: ")
+        selected_player.player_name = new_name
         session.add(selected_player)
         session.commit()
 
@@ -189,57 +189,38 @@ def main(): # Main function that puts everything together
         session.query(Player).filter_by(player_name=selected_player.id).delete()
         session.commit()
 
-    def view_all_high_scores(selected_player):
-        scores = session.query(Score).filter(Score.player_id == selected_player.id).all()
+
+    def view_all_high_scores():
+        scores = session.query(Score).all()
         for score in scores:
-            print(f"Player: {selected_player.player_name} - Score: {score.score}")
+            player = session.query(Player).filter(Player.id == score.player_id).first()
+            print(f"Player: {player.player_name} - Score: {score.score}")
     
 
     word = get_word()
     play(word, selected_player) 
 
     while True:
-        choice = input("Play Again? (Y/N) / View All High Scores (V) / Delete Player? (D) / Edit Name (E) / Quit? (Q): ").upper() # Asks user if they want to play again. Program will run as long as user types "Y"
+        choice = input("Play Again? (Y) / View All High Scores (V) / Delete Player? (D) / Edit Player Name (E) / Quit? (Q): ").upper() # Asks user if they want to play again. Program will run as long as user types "Y"
         
         if choice == "Y":
             word = get_word()
             play(word, selected_player)
-        
+            
         elif choice == "V":
-            view_all_high_scores(selected_player)
+            view_all_high_scores()
 
         elif choice == "D":
             delete_player(selected_player)
             print("Your player name has been deleted.")
         elif choice == "E":
             edit_player_id(selected_player)
-        elif choice == "Q" or choice == "N":
+        elif choice == "Q":
             break
         else: 
-            print("Invalid option. Please choose one of the following: Y, N, D, E, or Q.")
+            print("Invalid option. Please choose one of the following: Y, V, D, E, or Q.")
 
 if __name__ == "__main__": # This allows us to run the game from the command line
     main()
 
-
-
-
-
-# def main(): # Main function that puts everything together 
-#     Session = sessionmaker(bind=engine)
-#     session = Session()
-#     selected_player = get_player(session)
-#     while True:
-#         word = get_word()
-#         play(word, selected_player)
-#         if input("Play Again? (Y/N) ").upper() != "Y":
-#             break
-#     word = get_word()
-#     play(word) 
-#     while input("Play Again? (Y/N) ").upper() == "Y": # Asks user if they want to play again. Program will run as long as user types "Y"
-#         word = get_word()
-#         play(word)
-
-# if __name__ == "__main__": # This allows us to run the game from the command line
-#     main()
 
