@@ -25,7 +25,7 @@ Base.metadata.create_all(engine)
 
 def get_word(): 
     word= random.choice(word_list)
-    return word.upper() # We'll be converting all user input to uppercase to make comparison logic simpler and easier to read. 
+    return word.upper() # Using upper() FN converts all user input to uppercase to make comparison logic simpler and easier to read. 
           
 
 def play(word, selected_player): 
@@ -49,11 +49,11 @@ def play(word, selected_player):
                 print("You already guessed the letter", guess) 
             elif guess not in word: 
                 print(guess, "is not in the word.")
-                tries -= 1
+                tries -= 1 
                 guessed_letters.append(guess)
             else: 
                 print("Nice job", guess, "is in the word!")
-                total = 1
+                total += 1 
                 guessed_letters.append(guess)
                 word_as_list = list(word_completion)
                 indices = [i for i, letter in enumerate(word) if letter == guess]
@@ -78,6 +78,7 @@ def play(word, selected_player):
         print(word_completion)
         print("\n") # Prints new line for readability
     if guessed: 
+        # total += 1 
         print("FLAWLESS VICTORY. Congrats, you guessed the right word! You win!")
     
         Session = sessionmaker(bind=engine)
@@ -186,7 +187,7 @@ def main(): # Main function that puts everything together
         session.commit()
 
     def delete_player(selected_player):
-        session.query(Player).filter_by(player_name=selected_player.id).delete()
+        session.delete(selected_player)
         session.commit()
 
 
@@ -196,20 +197,18 @@ def main(): # Main function that puts everything together
             player = session.query(Player).filter(Player.id == score.player_id).first()
             print(f"Player: {player.player_name} - Score: {score.score}")
     
+    
 
     word = get_word()
     play(word, selected_player) 
 
     while True:
-        choice = input("Play Again? (Y) / View All High Scores (V) / Delete Player? (D) / Edit Player Name (E) / Quit? (Q): ").upper() # Asks user if they want to play again. Program will run as long as user types "Y"
-        
+        choice = input("Play Again? (Y) / View All High Scores (V) / Delete Player? (D) / Edit Player Name (E) / Quit? (Q): ").upper() # Asks user if they want to play again, among other options. Program will run as long as user types "Y"
         if choice == "Y":
             word = get_word()
             play(word, selected_player)
-            
         elif choice == "V":
             view_all_high_scores()
-
         elif choice == "D":
             delete_player(selected_player)
             print("Your player name has been deleted.")
