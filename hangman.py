@@ -173,25 +173,25 @@ session = Session()
 
 def main(): # Main function that puts everything together 
 
-    player_name = input("Enter your name: ")
+    player_name = input("Enter your name: ") # Asks user for their name
     selected_player = session.query(Player).filter(Player.player_name == player_name).first()
     if not selected_player:
         selected_player = Player(player_name=player_name)
         session.add_all([selected_player])
         session.commit()
 
-    def edit_player_id(selected_player):
+    def edit_player_id(selected_player): # Function to edit the player's name
         new_name = input("Enter your new name: ")
         selected_player.player_name = new_name
         session.add(selected_player)
         session.commit()
 
-    def delete_player(selected_player):
+    def delete_player(selected_player): # Function to delete the player's name from "players" table
         session.delete(selected_player)
         session.commit()
 
 
-    def view_all_high_scores():
+    def view_all_high_scores(): # Function to view all high scores of all players who have won from the "scores" table
         scores = session.query(Score).all()
         for score in scores:
             player = session.query(Player).filter(Player.id == score.player_id).first()
