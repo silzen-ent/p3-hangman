@@ -23,7 +23,16 @@ Delete your player profile.
 
 
 
+
+
+
+
+
 ---
+
+
+
+
 
 ## Introduction
 
